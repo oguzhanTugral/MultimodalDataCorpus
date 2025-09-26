@@ -1,0 +1,2121 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Fonts / Typekit -->
+  <link rel="stylesheet" href="https://use.typekit.net/pai4tmd.css">
+
+  <!-- Bootstrap 5 (only) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Your styles -->
+  <link rel="stylesheet" href="css/styles.css">
+
+  <title>Chroma Directed Initial and Final Tonic</title>
+
+  <!-- JS (Bootstrap 5 + p5.js) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/addons/p5.sound.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</head>
+
+
+<body class="background">
+
+
+
+  <div id="communicationPanel" class="container-fluid communicationPanel"
+    data-info-src="info\_1communicationPanel.json">
+
+    <div class="container-fluid text-center m-1 generalCommandsButton">
+      <div class="row justify-content-center align-items-center g-2">
+        <div class="col">
+          <button id="sendClick" type="button" class="btn btn-outline-warning w-100">
+            Click
+          </button>
+        </div>
+        <div class="col" style="display: none;">
+          <button id="tapBtn" type="button" class="btn btn-outline-warning w-100" style="display: none;">Tap</button>
+        </div>
+        <div class="col">
+          <button id="tempoBtn" type="button" class="btn btn-outline-warning w-100" onclick="sendTempo()">
+            Activate
+          </button>
+        </div>
+        <div class="col">
+          <button id="stopRow" type="button" class="btn btn-outline-warning w-100">
+            Stop Add Row
+          </button>
+        </div>
+        <div class="col">
+          <button id="exportXlsx" type="button" class="btn btn-outline-warning w-100">Export XLSX</button>
+        </div>
+        <div class="col">
+          <button id="githubUpload" type="button" class="btn btn-outline-warning w-100">Upload to gitHUB</button>
+        </div>
+        <div class="col">
+          <button id="downloadQualitative" type="button" class="btn btn-outline-warning w-100">
+            Download
+          </button>
+        </div>
+        <div data-info-src="" class="col">
+          <button id="resetPage" type="button" class="btn btn-outline-warning w-100">
+            Terminate
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="row g-2 align-items-start"><!-- ✅ bağımsız yükseklik -->
+      <!-- visuals -->
+      <div data-info-src="info\_1_communicationPanel_class_id\1.1_visuals_id.json" data id="visuals"
+        class="col-12 col-md-4 d-flex flex-column">
+
+        <!--  (Badge) -->
+        <div id="mindDrawing"
+          data-info-src="info\_1_communicationPanel_class_id\1.1_visualsTop_id\1.1.2_mindDrawing_id.json"
+          class="card w-100 shadow-sm rounded-3 mb-2">
+          <div class="card-body p-1">
+            <!-- 🔊 Canlı spektrogram canvas'ı -->
+            <canvas id="specCanvas"></canvas>
+          </div>
+        </div>
+
+        <!--  Video -->
+        <div id="videoColumn" class="card w-100 shadow-sm rounded-3 mb-2"
+          data-info-src="info\_1_communicationPanel_class_id\1.1_visualsTop_id\1.1.1_videoColumn_id.json">
+          <div class="card-body d-flex justify-content-center align-items-center p-1">
+            <video
+              data-info-src="info\_1_communicationPanel_class_id\1.1_visualsTop_id\1.1.1_videoColumn_id\1.1.1.1_video_id.json"
+              id="video" class="img-fluid rounded" width="240" height="160" autoplay muted></video>
+          </div>
+        </div>
+
+
+      </div>
+
+      <!-- Dashboard -->
+      <div data-info-src="info\_1_communicationPanel_class_id\1.2_dashboard_class_id.json" id="dashboard"
+        class="col-12 col-md-4 d-flex dashboard">
+        <div
+          data-info-src="info\_1_communicationPanel_class_id\1.2_dashboard_class_id\1.2.1_badgeNotifications_class.json"
+          class="card w-100 shadow-sm rounded-3 badgeNotifications">
+          <div
+            data-info-src="info\_1_communicationPanel_class_id\1.2_dashboard_class_id\1.2.1_badgeNotifications_class\1.2.1.1_infoPauseBadge_id.json"
+            id="infoPauseBadge" class="pause-badge" aria-hidden="true">
+            <span class="dot"></span>
+          </div>
+          <div
+            data-info-src="info\_1_communicationPanel_class_id\1.2_dashboard_class_id\1.2.2_notifications_class_id.json"
+            class="notifications" id="notifications">
+            <p data-info-src="info\_1_communicationPanel_class_id\1.2_dashboard_class_id\1.2.2_notifications_class_id\1.2.2.2_metricalPlacements_id.json"
+              id="metricalPlacements"></p>
+            <p data-info-src="info\_1_communicationPanel_class_id\1.2_dashboard_class_id\1.2.2_notifications_class_id\1.2.2.1_metricalPlacements2_id.json"
+              id="metricalPlacements2"></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- infoPanel -->
+      <div data-info-src="info\_1_communicationPanel_class_id\1.3_infoPanel_class_id.json" id="infoPanel"
+        class="col-12 col-md-4 d-flex infoPanel">
+        <div class="card w-100 shadow-sm rounded-3">
+          <p data-info-src="info\_1_communicationPanel_class_id\1.3_infoPanel_class_id\1.3.1_notifications_class.json"
+            class="notifications" id="infoColumn"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- modulesSettings -->
+  <div data-info-src="info\_2_modules.json" itemid="modules" class="accordion" id="accMain">
+    <!-- RecordingPerformance -->
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="h-rec">
+        <button data-info-src="info\_2_modules_class_id\_2.1_experimentAndRecordingSessionCont_class_id.json"
+          id="experimentAndRecordingSession" class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+          data-bs-target="#c-rec" aria-expanded="false" aria-controls="c-rec">
+          Experiment Recording & Auditory Performance & Demographic
+        </button>
+      </h2>
+      <div id="c-rec" class="accordion-collapse collapse" data-bs-parent="#accMain">
+        <div id="experimentAndRecordingSessionCont" class="experimentAndRecordingSession"
+          class="accordion-body container-fluid">
+
+          <!-- Satır 1 -->
+          <div class="row g-2 text-center">
+            <div
+              data-info-src="info\_2_modules_class_id\_2.1_experimentAndRecordingSessionCont_class_id\_2.1.1_performanceDate.json"
+              class="col-sm d-flex flex-column align-items-center">
+              <label for="performanceDate" class="form-label fw-bold">PerfDate</label>
+              <input type="text" id="performanceDate" class="form-control form-control-sm"
+                placeholder="Performance Date/Time" disabled>
+            </div>
+            <div
+              data-info-src="info\_2_modules_class_id\_2.1_experimentAndRecordingSessionCont_class_id\_2.1.2_uniqueId.json"
+              class="col-sm d-flex flex-column align-items-center">
+              <label for="uniqueId" class="form-label fw-bold">Unique Id</label>
+              <input type="text" id="uniqueId" class="form-control form-control-sm" placeholder="Unique Id">
+            </div>
+            <div
+              data-info-src="info\_2_modules_class_id\_2.1_experimentAndRecordingSessionCont_class_id\_2.1.3_project.json"
+              class="col-sm d-flex flex-column align-items-center">
+              <label for="project" class="form-label fw-bold">Project</label>
+              <input itemid="project" type="text" id="project" class="form-control form-control-sm"
+                placeholder="Project">
+            </div>
+            <div
+              data-info-src="info\_2_modules_class_id\_2.1_experimentAndRecordingSessionCont_class_id\_2.1.4_status.json"
+              class="col-sm d-flex flex-column align-items-center">
+              <label for="status" class="form-label fw-bold">Status</label>
+              <input type="text" id="status" class="form-control form-control-sm" placeholder="Status">
+            </div>
+            <div
+              data-info-src="info\_2_modules_class_id\_2.1_experimentAndRecordingSessionCont_class_id\_2.1.5_artist.json"
+              class="col-sm d-flex flex-column align-items-center">
+              <label for="artist" class="form-label fw-bold">Artist</label>
+              <input type="text" id="artist" class="form-control form-control-sm" placeholder="Artist / Performer">
+            </div>
+            <div
+              data-info-src="info\_2_modules_class_id\_2.1_experimentAndRecordingSessionCont_class_id\_2.1.6_title.json"
+              class="col-sm d-flex flex-column align-items-center">
+              <label for="title" class="form-label fw-bold">Title</label>
+              <input type="text" id="title" class="form-control form-control-sm" placeholder="Title">
+            </div>
+            <div
+              data-info-src="info\_2_modules_class_id\_2.1_experimentAndRecordingSessionCont_class_id\_2.1.7_period.json"
+              class="col-sm d-flex flex-column align-items-center">
+              <label for="period" class="form-label fw-bold">Period</label>
+              <input type="text" id="period" class="form-control form-control-sm" placeholder="Period">
+            </div>
+            <div
+              data-info-src="info\_2_modules_class_id\_2.1_experimentAndRecordingSessionCont_class_id\_2.1.8_style.json"
+              class="col-sm d-flex flex-column align-items-center">
+              <label for="style" class="form-label fw-bold">Style</label>
+              <input type="text" id="style" class="form-control form-control-sm" placeholder="Style">
+            </div>
+          </div>
+
+          <!-- Satır 2 -->
+          <div class="row g-2 text-center">
+            <div
+              data-info-src="info\_2_modules_class_id\_2.1_experimentAndRecordingSessionCont_class_id\_2.1.9_performancePractice.json"
+              class="col-sm d-flex flex-column align-items-center">
+              <label for="performancePractice" class="form-label fw-bold">PerfPractice</label>
+              <input type="text" id="performancePractice" class="form-control form-control-sm"
+                placeholder="Performance Practice">
+            </div>
+            <div
+              data-info-src="info\_2_modules_class_id\_2.1_experimentAndRecordingSessionCont_class_id\_2.1.10_genre.json"
+              class="col-sm d-flex flex-column align-items-center">
+              <label for="genre" class="form-label fw-bold">Genre</label>
+              <input type="text" id="genre" class="form-control form-control-sm" placeholder="Genre">
+            </div>
+            <div
+              data-info-src="info\_2_modules_class_id\_2.1_experimentAndRecordingSessionCont_class_id\_2.1.11_musicianNumber.json"
+              class="col-sm d-flex flex-column align-items-center">
+              <label for="musicianNumber" class="form-label fw-bold">Subject</label>
+              <input type="text" id="musicianNumber" class="form-control form-control-sm demo-input"
+                placeholder="Subject">
+            </div>
+            <div
+              data-info-src="info\_2_modules_class_id\_2.1_experimentAndRecordingSessionCont_class_id\_2.1.12_Edu.json"
+              class="col-sm d-flex flex-column align-items-center">
+              <label for="Edu" class="form-label fw-bold">Education</label>
+              <input type="text" id="Edu" class="form-control form-control-sm demo-input" placeholder="Education">
+            </div>
+            <div
+              data-info-src="info\_2_modules_class_id\_2.1_experimentAndRecordingSessionCont_class_id\_2.1.13_Cou2.json"
+              class="col-sm d-flex flex-column align-items-center">
+              <label for="Cou2" class="form-label fw-bold">Country</label>
+              <input type="text" id="Cou" class="form-control form-control-sm demo-input" placeholder="Country">
+            </div>
+            <div
+              data-info-src="info\_2_modules_class_id\_2.1_experimentAndRecordingSessionCont_class_id\_2.1.14_Eth.json"
+              class="col-sm d-flex flex-column align-items-center">
+              <label for="Eth" class="form-label fw-bold">Ethnicity</label>
+              <input type="text" id="Eth" class="form-control form-control-sm demo-input" placeholder="Ethnicity">
+            </div>
+            <div
+              data-info-src="info\_2_modules_class_id\_2.1_experimentAndRecordingSessionCont_class_id\_2.1.15_Pro.json"
+              class="col-sm d-flex flex-column align-items-center">
+              <label for="Pro" class="form-label fw-bold">Profession</label>
+              <input type="text" id="Pro" class="form-control form-control-sm demo-input" placeholder="Profession">
+            </div>
+            <div data-info-src="" class="col-sm d-flex flex-column align-items-center" style="visibility: hidden">
+              <label for="ProDisabled" class="form-label fw-bold">Profession</label>
+              <input type="text" id="ProDisabled" class="form-control form-control-sm demo-input"
+                placeholder="Profession" disabled>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MetricalPlacementHarmonySetTheory -->
+    <div data-info-src="info\_2_modules_class_id\_2.2_metricalPlacementHarmonySetTheory_class_id.json"
+      id="metricalPlacementHarmonySetTheory" class="accordion-item metricalPlacementHarmonySetTheory">
+      <h2 class="accordion-header" id="h-mphst">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c-mphst"
+          aria-expanded="false" aria-controls="c-mphst">
+          MetricalPlacementHarmonySetTheory
+        </button>
+      </h2>
+      <div id="c-mphst" class="accordion-collapse collapse" data-bs-parent="#accMain">
+        <div class="accordion-body container-fluid">
+          <div class="row g-3 align-items-stretch">
+
+            <!-- ========== Metrical Placements ========== -->
+            <div class="col-sm" id="metricalPlacements">
+              <div class="card shadow-sm h-100 panel-card d-flex flex-column">
+                <div class="card-body p-3 d-flex flex-column">
+                  <h6 class="text-center fw-bold mb-3">Metrical Placements</h6>
+
+                  <!-- Tempo & First Bar -->
+                  <div id="tempoAndBarStart" class="row g-3 mb-3 justify-content-center text-center">
+                    <div class="col-md-3">
+                      <label for="tempo" class="form-label">Tempo</label>
+                      <input id="tempo" type="text" class="form-control form-control-sm" placeholder="Tempo">
+                    </div>
+                    <div class="col-md-3">
+                      <label for="updateTempo" class="form-label">Update Tempo</label>
+                      <input id="updateTempo" type="text" class="form-control form-control-sm"
+                        placeholder="Update Tempo" disabled>
+                    </div>
+                    <div class="col-md-3">
+                      <label for="startBarNumber" class="form-label">First Bar</label>
+                      <input id="startBarNumber" type="text" class="form-control form-control-sm"
+                        placeholder="First Bar">
+                    </div>
+                  </div>
+
+
+                  <!-- Time Signature / Memory + Composition -->
+                  <div class="row g-3 mb-3 TimeSignatureMemoryComposition">
+                    <!-- Time Signature & Memory -->
+                    <div id="TimeSignatureMemory" class="col-sm">
+                      <div class="card shadow-sm h-100">
+                        <div class="card-body p-3">
+                          <h6 class="text-center fw-bold mb-3">Time Signature</h6>
+
+                          <div class="row g-2">
+                            <div class="col-6">
+                              <label for="numer" class="form-label">Numerator</label>
+                              <input id="numer" type="number" min="1" step="1" class="form-control form-control-sm"
+                                value="4">
+                            </div>
+                            <div class="col-6">
+                              <label for="denom" class="form-label">Denominator</label>
+                              <select id="denom" class="form-control form-control-sm">
+                                <option>1</option>
+                                <option>2</option>
+                                <option selected>4</option>
+                                <option>8</option>
+                                <option>16</option>
+                              </select>
+                            </div>
+                          </div>
+
+                          <div class="">
+                            <label for="memorySpan" class="form-label">Memory Span</label>
+                            <select id="memorySpan" class="form-control form-control-sm">
+                              <option selected disabled>Memory</option>
+                              <option value="8">Quarter Bar</option>
+                              <option value="16">Half Bar</option>
+                              <option value="32">One Bar</option>
+                              <option value="64">Two Bars</option>
+                              <option value="128">Three Bars</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Composition Start & Stop (eşit yükseklik) -->
+                    <div class="col-sm">
+                      <div class="row g-3 align-items-stretch composition">
+                        <!-- Start -->
+                        <div class="col-sm d-flex">
+                          <div class="card shadow-sm h-100 flex-fill d-flex flex-column">
+                            <div class="card-body d-flex flex-column p-3">
+                              <h6 class="text-center fw-bold mb-3">Composition Start</h6>
+
+                              <label for="setBeat" class="form-label">Beat Start</label>
+                              <input id="setBeat" type="text" class="form-control form-control-sm mb-2"
+                                placeholder="e.g., 1">
+
+                              <label for="setBar" class="form-label">Bar Start</label>
+                              <input id="setBar" type="text" class="form-control form-control-sm mb-3"
+                                placeholder="e.g., 1">
+
+                              <button id="setSchedule" type="button" class="btn btn-outline-warning btn-sm w-100">
+                                SchStart
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+
+                        <!-- Stop -->
+                        <div class="col-sm d-flex">
+                          <div class="card shadow-sm h-100 flex-fill d-flex flex-column">
+                            <div class="card-body d-flex flex-column p-3">
+                              <h6 class="text-center fw-bold mb-3 text-danger">Composition Stop</h6>
+
+                              <label for="setBeatStop" class="form-label">Beat Stop</label>
+                              <input id="setBeatStop" type="text" class="form-control form-control-sm mb-2"
+                                placeholder="e.g., 4">
+
+                              <label for="setBarStop" class="form-label">Bar Stop</label>
+                              <input id="setBarStop" type="text" class="form-control form-control-sm mb-3"
+                                placeholder="e.g., 8">
+
+                              <button id="setScheduleStop" type="button" class="btn btn-outline-danger btn-sm w-100">
+                                SchStop
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div> <!-- /composition -->
+                  </div>
+
+                  <!-- Indicators -->
+                  <div class="row text-center g-3 metricalPlacementsIndicators">
+                    <div class="col-sm">
+                      <span class="labels d-block fw-semibold">TimeSign</span>
+                      <p class="mb-0"><span id="timeSigLeft">4</span>/<span id="timeSigRight">4</span></p>
+                    </div>
+                    <div class="col-sm">
+                      <span class="labels d-block fw-semibold">Time</span>
+                      <p id="miliseconds" class="numberText mb-0"></p>
+                    </div>
+                    <div class="col-sm">
+                      <span class="labels d-block fw-semibold">Quant</span>
+                      <p id="quantCounter" class="numberText mb-0"></p>
+                    </div>
+                    <div class="col-sm">
+                      <span class="labels d-block fw-semibold">Beat</span>
+                      <p id="beatCounter" class="numberText mb-0"></p>
+                    </div>
+                    <div class="col-sm">
+                      <span class="labels d-block fw-semibold">Bar</span>
+                      <p id="barCounter" class="numberText mb-0"></p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ========== Harmony & Counterpoint ========== -->
+            <div class="col-sm" id="harmonyCounterpoint">
+              <div class="card shadow-sm h-100 panel-card d-flex flex-column">
+                <div class="card-body p-3 d-flex flex-column">
+                  <h6 class="text-center fw-bold mb-3">Harmony &amp; Counterpoint</h6>
+
+                  <!-- Key / Quality -->
+                  <div class="row g-2 align-items-end mb-3">
+                    <div class="col-sm">
+                      <label for="keyInd" class="form-label">Key</label>
+                      <input id="keyInd" type="text" class="form-control form-control-sm" placeholder="e.g., C, F#, Bb"
+                        list="keyIndList" inputmode="text" autocomplete="off">
+                      <datalist id="keyIndList">
+                        <option value="C">
+                        <option value="C#">
+                        <option value="Db">
+                        <option value="D">
+                        <option value="D#">
+                        <option value="Eb">
+                        <option value="E">
+                        <option value="F">
+                        <option value="F#">
+                        <option value="Gb">
+                        <option value="G">
+                        <option value="G#">
+                        <option value="Ab">
+                        <option value="A">
+                        <option value="A#">
+                        <option value="Bb">
+                        <option value="B">
+                      </datalist>
+                    </div>
+                    <div class="col-sm">
+                      <label for="keyQua" class="form-label">Quality</label>
+                      <input id="keyQua" type="text" class="form-control form-control-sm"
+                        placeholder="e.g., M, m, dor, mix" list="keyQuaList" inputmode="text" autocomplete="off">
+                      <datalist id="keyQuaList">
+                        <option value="M">
+                        <option value="m">
+                        <option value="ion">
+                        <option value="dor">
+                        <option value="phr">
+                        <option value="lyd">
+                        <option value="mix">
+                        <option value="aeo">
+                        <option value="loc">
+                      </datalist>
+                    </div>
+                  </div>
+
+                  <!-- Set Theory -->
+                  <div class="card-subsection mb-3">
+                    <h6 class="text-center fw-bold mb-2">Set Theory</h6>
+                    <div class="row g-3 text-center align-items-start">
+                      <div class="col-sm d-flex flex-column justify-content-start align-items-center">
+                        <label class="labels fw-normal mb-1" for="stmHolder">PcSet</label>
+                        <p id="stmHolder" class="card-text numberText mb-0"></p>
+                      </div>
+                      <div class="col-sm d-flex flex-column justify-content-start align-items-center">
+                        <label class="labels fw-normal mb-1" for="intervalCode">ChordC</label>
+                        <p id="intervalCode" class="card-text numberText mb-0"></p>
+                      </div>
+                      <div class="col-sm d-flex flex-column justify-content-start align-items-center">
+                        <label class="labels fw-normal mb-1" for="actualMidiNotes">Register</label>
+                        <p id="actualMidiNotes" class="card-text numberText mb-0"></p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- RN / Root / Bass / Soprano -->
+                  <div class="row g-3 text-center">
+                    <div class="col-sm">
+                      <span class="labels d-block fw-semibold">RN</span>
+                      <p id="romNumAnaly" class="card-text numberText fw-bold mb-0">X</p>
+                    </div>
+                    <div class="col-sm">
+                      <span class="labels d-block fw-semibold">Root</span>
+                      <p id="root" class="card-text numberText fw-bold mb-0"></p>
+                    </div>
+                    <div class="col-sm">
+                      <span class="labels d-block fw-semibold">Bass</span>
+                      <p id="bassNoteName" class="card-text numberText mb-0"></p>
+                    </div>
+                    <div class="col-sm">
+                      <span class="labels d-block fw-semibold">Soprano</span>
+                      <p id="sopPc" class="card-text numberText mb-0"></p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <!-- _23Electrophysiology -->
+    <div data-info-src="info\_2_modules_class_id\_2.3_electrophysiology_class_id.json" id="electrophysiology"
+      class="accordion-item electrophysiology">
+      <h2 class="accordion-header" id="h-elec">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c-elec"
+          aria-expanded="false" aria-controls="c-elec">
+          Electrophysiology
+        </button>
+      </h2>
+      <div id="c-elec" class="accordion-collapse collapse" data-bs-parent="#accMain">
+        <div class="accordion-body">
+
+          <div class="container-fluid">
+            <div class="row electrophysiological">
+              <div class="col-sm">
+                <label>X</label>
+                <p id="acc1"></p>
+              </div>
+              <div class="col-sm">
+                <label>Y</label>
+                <p id="acc2"></p>
+              </div>
+              <div class="col-sm">
+                <label>Z</label>
+                <p id="acc3"></p>
+              </div>
+              <div class="col-sm">
+                <label>Fz</label>
+                <p id="ele1"></p>
+              </div>
+              <div class="col-sm">
+                <label>Cz</label>
+                <p id="ele2"></p>
+              </div>
+              <div class="col-sm">
+                <label>Pz</label>
+                <p id="ele3"></p>
+              </div>
+              <div class="col-sm">
+                <label>F3</label>
+                <p id="ele4"></p>
+              </div>
+              <div class="col-sm">
+                <label>F4</label>
+                <p id="ele5"></p>
+              </div>
+              <div class="col-sm">
+                <label>P3</label>
+                <p id="ele6"></p>
+              </div>
+              <div class="col-sm">
+                <label>P4</label>
+                <p id="ele7"></p>
+              </div>
+              <div class="col-sm">
+                <label>Oz</label>
+                <p id="ele8"></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Go/NoGoTask -->
+    <div data-info-src="info\_2_modules_class_id\_2.4_goNoGoTask_class_id.json" id="goNoGoTask"
+      class="accordion-item goNoGoTask">
+      <h2 class="accordion-header" id="h-gonogo">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c-gonogo"
+          aria-expanded="false" aria-controls="c-gonogo">
+          Go/NoGoTask
+        </button>
+      </h2>
+      <div id="c-gonogo" class="accordion-collapse collapse" data-bs-parent="#accMain">
+        <div class="accordion-body">
+
+          <!-- Stimulus stage -->
+          <div class="card p-4 mb-3 text-center">
+            <div class="d-flex justify-content-center gap-3">
+              <button id="goNoGo_Go" class="btn btn-success flex-fill">Press Button as Stimulus Continues</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- _25ValenceAnalysis -->
+    <div data-info-src="info\_2_modules_class_id\_2.5_valenceAnalysis_class_id.json" id="valenceAnalysis"
+      class="accordion-item valenceAnalysis">
+      <h2 class="accordion-header" id="headingValence">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+          data-bs-target="#collapseValence" aria-expanded="false" aria-controls="collapseValence">
+          ValenceAnalysis
+        </button>
+      </h2>
+      <div id="collapseValence" class="accordion-collapse collapse" aria-labelledby="headingValence"
+        data-bs-parent="#accMain">
+        <div class="accordion-body">
+
+          <!-- Valence Mode -->
+          <div class="d-flex justify-content-center align-items-center gap-2 my-2">
+            <select id="ValenceInput" class="form-control form-control-sm">
+              <option value="External" selected>External</option>
+              <option value="Internal">Internal</option>
+            </select>
+
+            <button id="valencePos" type="button" class="btn btn-success">Positive</button>
+            <button id="valenceNeg" type="button" class="btn btn-danger">Negative</button>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+
+    <!-- _26EmotionAnalysis -->
+    <div data-info-src="info\_2_modules_class_id\_2.6_emotionAnalysis_class_id.json" id="emotionAnalysis"
+      class="accordion-item emotionAnalysis">
+      <h2 class="accordion-header" id="h-emotion">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c-emotion"
+          aria-expanded="false" aria-controls="c-emotion">
+          EmotionAnalysis
+        </button>
+      </h2>
+      <div id="c-emotion" class="accordion-collapse collapse" data-bs-parent="#accMain">
+        <div class="accordion-body">
+
+
+
+          <div class="card p-3 mb-2">
+            <div class="container-fluid">
+              <div class="row">
+
+                <!-- Mutlu -->
+                <div id="happy2" class="col p-2">
+                  <div class="row mb-2">
+
+                    <!-- Emotion Mode -->
+                    <div class="d-flex justify-content-center align-items-center gap-2 my-2">
+                      <select id="EmotionInput" class="form-control form-control-sm">
+                        <option value="External" selected>External</option>
+                        <option value="Internal">Internal</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="row mb-2">
+                    <div class="col">
+                      <button type="button" class="btn btn-custom-happy w-100 emotionButtons" value="28"
+                        data-emo-name="Pleased">Pleased</button>
+                    </div>
+                    <div class="col">
+                      <button type="button" class="btn btn-custom-happy w-100 emotionButtons" value="27"
+                        data-emo-name="Glad">Glad</button>
+                    </div>
+                  </div>
+                  <div class="row mb-2">
+                    <div class="col">
+                      <button type="button" class="btn btn-custom-happy w-100 emotionButtons" value="26"
+                        data-emo-name="Happy">Happy</button>
+                    </div>
+                    <div class="col">
+                      <button type="button" class="btn btn-custom-happy w-100 emotionButtons" value="25"
+                        data-emo-name="Delighted">Delighted</button>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col">
+                      <button type="button" class="btn btn-custom-happy w-100 emotionButtons" value="24"
+                        data-emo-name="Excited">Excited</button>
+                    </div>
+                    <div class="col">
+                      <button type="button" class="btn btn-custom-happy w-100 emotionButtons" value="23"
+                        data-emo-name="Astonished">Astonished</button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Mutluya çeken nötr -->
+                <div id="neuHappy2" class="col p-2">
+                  <div class="row mb-2">
+                    <div class="col">
+                      <button type="button" class="btn btn-custom-neuHappy w-100 emotionButtons" value="22"
+                        data-emo-name="Content">Content</button>
+                    </div>
+                    <div class="col">
+                      <button type="button" class="btn btn-custom-neuHappy w-100 emotionButtons" value="21"
+                        data-emo-name="Satisfied">Satisfied</button>
+                    </div>
+                  </div>
+                  <div class="row mb-2">
+                    <div class="col">
+                      <button type="button" class="btn btn-custom-neuHappy w-100 emotionButtons" value="20"
+                        data-emo-name="Calm">Calm</button>
+                    </div>
+                    <div class="col">
+                      <button type="button" class="btn btn-custom-neuHappy w-100 emotionButtons" value="19"
+                        data-emo-name="Serene">Serene</button>
+                    </div>
+                  </div>
+                  <div class="row mb-2">
+                    <div class="col">
+                      <button type="button" class="btn btn-custom-neuHappy w-100 emotionButtons" value="18"
+                        data-emo-name="At ease">At ease</button>
+                    </div>
+                    <div class="col">
+                      <button type="button" class="btn btn-custom-neuHappy w-100 emotionButtons" value="17"
+                        data-emo-name="Relaxed">Relaxed</button>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col">
+                      <button type="button" class="btn btn-custom-neuHappy w-100 emotionButtons" value="16"
+                        data-emo-name="Sleepy">Sleepy</button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Üzgüne çeken nötr -->
+                <div id="neuSad2" class="col">
+                  <div class="row mb-2">
+                    <div class="col">
+                      <button type="button" class="btn btn-custom-neuSad w-100 emotionButtons" value="15"
+                        data-emo-name="Tired">Tired</button>
+                    </div>
+                    <div class="col">
+                      <button type="button" class="btn btn-custom-neuSad w-100 emotionButtons" value="14"
+                        data-emo-name="Droopy">Droopy</button>
+                    </div>
+                  </div>
+                  <div class="row mb-2">
+                    <div class="col">
+                      <button type="button" class="btn btn-custom-neuSad w-100 emotionButtons" value="13"
+                        data-emo-name="Bored">Bored</button>
+                    </div>
+                    <div class="col">
+                      <button type="button" class="btn btn-custom-neuSad w-100 emotionButtons" value="12"
+                        data-emo-name="Gloomy">Gloomy</button>
+                    </div>
+                  </div>
+                  <div class="row mb-2">
+                    <div class="col">
+                      <button type="button" class="btn btn-custom-neuSad w-100 emotionButtons" value="11"
+                        data-emo-name="Sad">Sad</button>
+                    </div>
+                    <div class="col">
+                      <button type="button" class="btn btn-custom-neuSad w-100 emotionButtons" value="10"
+                        data-emo-name="Depressed">Depressed</button>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col">
+                      <button type="button" class="btn btn-custom-neuSad w-100 emotionButtons" value="9"
+                        data-emo-name="Miserable">Miserable</button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Üzgün -->
+                <div id="sad2" class="col p-2">
+                  <div class="row mb-2">
+                    <div class="col">
+                      <button type="button" class="btn btn-custom-sad w-100 emotionButtons" value="8"
+                        data-emo-name="Aroused">Aroused</button>
+                    </div>
+                    <div class="col">
+                      <button type="button" class="btn btn-custom-sad w-100 emotionButtons" value="7"
+                        data-emo-name="Alarmed">Alarmed</button>
+                    </div>
+                  </div>
+                  <div class="row mb-2">
+                    <div class="col">
+                      <button type="button" class="btn btn-custom-sad w-100 emotionButtons" value="6"
+                        data-emo-name="Angry">Angry</button>
+                    </div>
+                    <div class="col">
+                      <button type="button" class="btn btn-custom-sad w-100 emotionButtons" value="5"
+                        data-emo-name="Afraid">Afraid</button>
+                    </div>
+                  </div>
+                  <div class="row mb-2">
+                    <div class="col">
+                      <button type="button" class="btn btn-custom-sad w-100 emotionButtons" value="4"
+                        data-emo-name="Tense">Tense</button>
+                    </div>
+                    <div class="col">
+                      <button type="button" class="btn btn-custom-sad w-100 emotionButtons" value="3"
+                        data-emo-name="Annoyed">Annoyed</button>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col">
+                      <button type="button" class="btn btn-custom-sad w-100 emotionButtons" value="2"
+                        data-emo-name="Frustrated">Frustrated</button>
+                    </div>
+                    <div class="col">
+                      <button type="button" class="btn btn-custom-sad w-100 emotionButtons" value="1"
+                        data-emo-name="Distressed">Distressed</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Fast Fourier Transform -->
+    <div data-info-src="info\_2_modules_class_id\_2.7_fastFourierTransform_class_id.json" id="fastFourierTransform"
+      class="accordion-item fastFourierTransform">
+      <h2 class="accordion-header" id="h-fft">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c-fft"
+          aria-expanded="false" aria-controls="c-fft">
+          Fast Fourier Transform
+        </button>
+      </h2>
+      <div id="c-fft" class="accordion-collapse collapse" data-bs-parent="#accMain">
+        <div class="accordion-body">
+          <div class="container-fluid">
+            <!-- ÜST KONTROL SATIRI -->
+            <div class="d-flex gap-2 align-items-center justify-content-center flex-wrap">
+              <select id="audioDeviceSelect" class="form-control flex-fill"></select>
+              <select id="fftBinsSelect" class="form-control flex-fill">
+                <option value="64">64 bins</option>
+                <option value="128">128 bins</option>
+                <option value="256" selected>256 bins</option>
+                <option value="512">512 bins</option>
+                <option value="1024">1024 bins</option>
+                <option value="2048">2048 bins</option>
+              </select>
+              <button id="audioStart" class="btn btn-primary flex-fill">Start FFT</button>
+              <button id="audioStop" class="btn btn-outline-secondary flex-fill">Stop</button>
+            </div>
+
+            <!-- Canvas ALT SATIRDA (ortalanmış) -->
+            <div id="p5-holder" class="d-flex justify-content-center align-items-start"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Data Table -->
+    <div data-info-src="info\_2_modules_class_id\_2.8_dataTable_class_id.json" id="dataTable"
+      class="accordion-item dataTable">
+      <h2 class="accordion-header" id="h-_28DataTable">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+          data-bs-target="#c-_28DataTable" aria-expanded="false" aria-controls="c-_28DataTable">
+          Data Table
+        </button>
+      </h2>
+      <div id="c-_28DataTable" class="accordion-collapse collapse" data-bs-parent="#accMain">
+        <div class="accordion-body">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-sm">
+                <div class="table-responsive"> <!-- ✅ Add this wrapper -->
+                  <table id="valueHolder" class="table table-striped table-bordered">
+                    <thead class="table-dark text-center align-middle">
+                      <tr>
+                        <!-- --- Kayıt Metası --- -->
+                        <th scope="col">#</th>
+                        <!-- --- FER --- -->
+                        <th class="visuals" scope="col">FER</th>
+
+                        <!-- --- Photo --- -->
+                        <th class="visuals" scope="col">Photo</th>
+
+
+
+                        <th class="recordingSes" scope="col">Performance Date</th>
+                        <th class="recordingSes" scope="col">Unique Id</th>
+                        <th class="recordingSes" scope="col">Project</th>
+                        <th class="recordingSes" scope="col">DataStatus</th>
+
+
+                        <th class="trackLabels" scope="col">Artist</th>
+                        <th class="trackLabels" scope="col">Title</th>
+                        <th class="trackLabels" scope="col">PerfPractice</th>
+                        <th class="trackLabels" scope="col">Period</th>
+                        <th class="trackLabels" scope="col">Style</th>
+                        <th class="trackLabels" scope="col">Genre</th>
+
+                        <!-- --- Demografi --- -->
+                        <th class="demography" scope="col">Subject</th>
+                        <th class="demography" scope="col">Gender</th>
+                        <th class="demography" scope="col">Education</th>
+                        <th class="demography" scope="col">Country</th>
+                        <th class="demography" scope="col">Ethnicity</th>
+                        <th class="demography" scope="col">Proficiency</th>
+
+                        <!-- --- Zamanlama / metrik --- -->
+                        <th class="temporalLabels" scope="col">Tempo</th>
+                        <th class="temporalLabels" scope="col">TimeSig</th>
+                        <th class="temporalLabels" scope="col">ms</th>
+                        <th class="temporalLabels" scope="col">Qua</th>
+                        <th class="temporalLabels" scope="col">Beat</th>
+                        <th class="temporalLabels" scope="col">Bar</th>
+                        <th class="temporalLabels" scope="col">jsSenMem</th>
+
+                        <!-- --- Harmoni & analiz --- -->
+                        <th class="HarmonyAnalysis" scope="col">Key</th>
+                        <th class="HarmonyAnalysis" scope="col">KeyQ</th>
+                        <th class="HarmonyAnalysis" scope="col">RomNumB</th>
+                        <th class="HarmonyAnalysis" scope="col">RomNum</th>
+                        <th class="HarmonyAnalysis" scope="col">Bass</th>
+                        <th class="HarmonyAnalysis" scope="col">SopPc</th>
+                        <th class="HarmonyAnalysis" scope="col">PitchClassSet</th>
+                        <th class="HarmonyAnalysis" scope="col">ChordCode</th>
+                        <th class="HarmonyAnalysis" scope="col">UpdatedMod</th>
+                        <th class="HarmonyAnalysis" scope="col">MidNum</th>
+
+
+                        <!-- --- Valence (ele8'den hemen sonra) --- -->
+                        <th class="behavioral" scope="col">GoNoGoPar</th>
+
+
+                        <th scope="col" class="behAct-ExtVal">ExtVal</th>
+                        <th scope="col" class="behAct-IntVal">IntVal</th>
+
+
+                        <!-- --- Emotion (Valence'dan hemen sonra) --- -->
+                        <th scope="col" data-emotion="ExtPar">EmoExtPar</th>
+                        <th scope="col" data-emotion="ExtVal">EmoExtVal</th>
+                        <th scope="col" data-emotion="ExtAve">EmoExtAve</th>
+
+                        <th scope="col" data-emotion="IntPar">EmoIntPar</th>
+                        <th scope="col" data-emotion="IntVal">EmoIntVal</th>
+                        <th scope="col" data-emotion="IntAve">EmoIntAve</th>
+
+
+                        <!-- --- Fiziksel / EEG --- -->
+                        <th scope="col" data-move="acc1">acc1</th>
+                        <th scope="col" data-move="acc2">acc2</th>
+                        <th scope="col" data-move="acc3">acc3</th>
+
+
+                        <th class="electrophysiologicalX" scope="col">elec1</th>
+                        <th class="electrophysiologicalX" scope="col">elec2</th>
+                        <th class="electrophysiologicalX" scope="col">elec3</th>
+                        <th class="electrophysiologicalX" scope="col">elec4</th>
+                        <th class="electrophysiologicalX" scope="col">elec5</th>
+                        <th class="electrophysiologicalX" scope="col">elec6</th>
+                        <th class="electrophysiologicalX" scope="col">elec7</th>
+                        <th class="electrophysiologicalX" scope="col">elec8</th>
+
+                        <!-- --- Caplin --- -->
+
+                        <!-- Caplin columns in requested order (NO inner text) -->
+                        <th scope="col" data-block="1-3">1.3</th>
+                        <th scope="col" data-block="1-2">1.2</th>
+                        <th scope="col" data-block="1-1">1.1</th>
+                        <th scope="col" data-block="1-0">1.0</th>
+
+                        <!-- 2.x block -->
+                        <th scope="col" data-block="2-3">2.3</th>
+                        <th scope="col" data-block="2-2">2.2</th>
+                        <th scope="col" data-block="2-1">2.1</th>
+                        <th scope="col" data-block="2-0">2.0</th>
+
+                        <!-- 3.x block -->
+                        <th scope="col" data-block="3-4">3.4</th>
+                        <th scope="col" data-block="3-3">3.3</th>
+                        <th scope="col" data-block="3-2">3.2</th>
+                        <th scope="col" data-block="3-1">3.1</th>
+                        <th scope="col" data-block="3-0">3.0</th>
+
+                        <!-- 4.x block -->
+                        <th scope="col" data-block="4-5">4.5</th>
+                        <th scope="col" data-block="4-4">4.4</th>
+                        <th scope="col" data-block="4-3">4.3</th>
+                        <th scope="col" data-block="4-2">4.2</th>
+                        <th scope="col" data-block="4-1">4.1</th>
+                        <th scope="col" data-block="4-0">4.0</th>
+
+
+                        <!-- 5.x block -->
+                        <th scope="col" data-block="5-3">5.3</th>
+                        <th scope="col" data-block="5-2">5.2</th>
+                        <th scope="col" data-block="5-1">5.1</th>
+                        <th scope="col" data-block="5-0">5.0</th>
+
+                        <!-- 6.x block -->
+                        <th scope="col" data-block="6-4">6.4</th>
+                        <th scope="col" data-block="6-3">6.3</th>
+                        <th scope="col" data-block="6-2">6.2</th>
+                        <th scope="col" data-block="6-1">6.1</th>
+                        <th scope="col" data-block="6-0">6.0</th>
+
+                        <!-- 7.x block -->
+                        <th scope="col" data-block="7-4">7.4</th>
+                        <th scope="col" data-block="7-3">7.3</th>
+                        <th scope="col" data-block="7-2">7.2</th>
+                        <th scope="col" data-block="7-1">7.1</th>
+                        <th scope="col" data-block="7-0">7.0</th>
+
+                        <!-- 8.x block -->
+                        <th scope="col" data-block="8-4">8.4</th>
+                        <th scope="col" data-block="8-3">8.3</th>
+                        <th scope="col" data-block="8-2">8.2</th>
+                        <th scope="col" data-block="8-1">8.1</th>
+                        <th scope="col" data-block="8-0">8.0</th>
+                        <th scope="col" data-block="8-1">8.1</th>
+                        <th scope="col" data-block="8-0">8.0</th>
+
+
+
+                        <!-- FFT bin ranges (1–50) -->
+                        <!-- 🎵 FFT Bins (fs=48kHz, bins=256), each bin ~93.75 Hz, upper bound exclusive -->
+                        <!-- 🎵 Octave 1 (≈33–65 Hz) -->
+                        <th scope="col" class="fft-bin octave-1" data-freq-start="0.0" data-freq-end="93.8">
+                          0.0–93.8 Hz
+                        </th>
+                        <!-- 🎵 Octave 2 (≈65–131 Hz) -->
+                        <th scope="col" class="fft-bin octave-2" data-freq-start="93.8" data-freq-end="187.5">
+                          93.8–187.5 Hz
+                        </th>
+                        <!-- 🎵 Octave 3 (≈131–262 Hz) -->
+                        <th scope="col" class="fft-bin octave-3" data-freq-start="187.5" data-freq-end="281.2">
+                          187.5–281.2 Hz
+                        </th>
+                        <!-- 🎵 Octave 4 (≈262–523 Hz) -->
+                        <th scope="col" class="fft-bin octave-4" data-freq-start="281.2" data-freq-end="375.0">
+                          281.2–375.0 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-4" data-freq-start="375.0" data-freq-end="468.8">
+                          375.0–468.8 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-4" data-freq-start="468.8" data-freq-end="562.5">
+                          468.8–562.5 Hz
+                        </th>
+                        <!-- 🎵 Octave 5 (≈523–1046 Hz) -->
+                        <th scope="col" class="fft-bin octave-5" data-freq-start="562.5" data-freq-end="656.2">
+                          562.5–656.2 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-5" data-freq-start="656.2" data-freq-end="750.0">
+                          656.2–750.0 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-5" data-freq-start="750.0" data-freq-end="843.8">
+                          750.0–843.8 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-5" data-freq-start="843.8" data-freq-end="937.5">
+                          843.8–937.5 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-5" data-freq-start="937.5" data-freq-end="1031.2">
+                          937.5–1031.2 Hz
+                        </th>
+                        <!-- 🎵 Octave 6 (≈1046–2093 Hz) -->
+                        <th scope="col" class="fft-bin octave-6" data-freq-start="1031.2" data-freq-end="1125.0">
+                          1031.2–1125.0 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-6" data-freq-start="1125.0" data-freq-end="1218.8">
+                          1125.0–1218.8 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-6" data-freq-start="1218.8" data-freq-end="1312.5">
+                          1218.8–1312.5 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-6" data-freq-start="1312.5" data-freq-end="1406.2">
+                          1312.5–1406.2 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-6" data-freq-start="1406.2" data-freq-end="1500.0">
+                          1406.2–1500.0 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-6" data-freq-start="1500.0" data-freq-end="1593.8">
+                          1500.0–1593.8 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-6" data-freq-start="1593.8" data-freq-end="1687.5">
+                          1593.8–1687.5 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-6" data-freq-start="1687.5" data-freq-end="1781.2">
+                          1687.5–1781.2 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-6" data-freq-start="1781.2" data-freq-end="1875.0">
+                          1781.2–1875.0 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-6" data-freq-start="1875.0" data-freq-end="1968.8">
+                          1875.0–1968.8 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-6" data-freq-start="1968.8" data-freq-end="2062.5">
+                          1968.8–2062.5 Hz
+                        </th>
+                        <!-- 🎵 Octave 7 (≈2093–4186 Hz) -->
+                        <th scope="col" class="fft-bin octave-7" data-freq-start="2062.5" data-freq-end="2156.2">
+                          2062.5–2156.2 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-7" data-freq-start="2156.2" data-freq-end="2250.0">
+                          2156.2–2250.0 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-7" data-freq-start="2250.0" data-freq-end="2343.8">
+                          2250.0–2343.8 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-7" data-freq-start="2343.8" data-freq-end="2437.5">
+                          2343.8–2437.5 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-7" data-freq-start="2437.5" data-freq-end="2531.2">
+                          2437.5–2531.2 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-7" data-freq-start="2531.2" data-freq-end="2625.0">
+                          2531.2–2625.0 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-7" data-freq-start="2625.0" data-freq-end="2718.8">
+                          2625.0–2718.8 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-7" data-freq-start="2718.8" data-freq-end="2812.5">
+                          2718.8–2812.5 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-7" data-freq-start="2812.5" data-freq-end="2906.2">
+                          2812.5–2906.2 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-7" data-freq-start="2906.2" data-freq-end="3000.0">
+                          2906.2–3000.0 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-7" data-freq-start="3000.0" data-freq-end="3093.8">
+                          3000.0–3093.8 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-7" data-freq-start="3093.8" data-freq-end="3187.5">
+                          3093.8–3187.5 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-7" data-freq-start="3187.5" data-freq-end="3281.2">
+                          3187.5–3281.2 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-7" data-freq-start="3281.2" data-freq-end="3375.0">
+                          3281.2–3375.0 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-7" data-freq-start="3375.0" data-freq-end="3468.8">
+                          3375.0–3468.8 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-7" data-freq-start="3468.8" data-freq-end="3562.5">
+                          3468.8–3562.5 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-7" data-freq-start="3562.5" data-freq-end="3656.2">
+                          3562.5–3656.2 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-7" data-freq-start="3656.2" data-freq-end="3750.0">
+                          3656.2–3750.0 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-7" data-freq-start="3750.0" data-freq-end="3843.8">
+                          3750.0–3843.8 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-7" data-freq-start="3843.8" data-freq-end="3937.5">
+                          3843.8–3937.5 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-7" data-freq-start="3937.5" data-freq-end="4031.2">
+                          3937.5–4031.2 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-7" data-freq-start="4031.2" data-freq-end="4125.0">
+                          4031.2–4125.0 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-7" data-freq-start="4125.0" data-freq-end="4218.8">
+                          4125.0–4218.8 Hz
+                        </th>
+                        <!-- 🎵 Octave 8 (≈4186–8372 Hz) -->
+                        <th scope="col" class="fft-bin octave-8" data-freq-start="4218.8" data-freq-end="4312.5">
+                          4218.8–4312.5 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-8" data-freq-start="4312.5" data-freq-end="4406.2">
+                          4312.5–4406.2 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-8" data-freq-start="4406.2" data-freq-end="4500.0">
+                          4406.2–4500.0 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-8" data-freq-start="4500.0" data-freq-end="4593.8">
+                          4500.0–4593.8 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-8" data-freq-start="4593.8" data-freq-end="4687.5">
+                          4593.8–4687.5 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-8" data-freq-start="4687.5" data-freq-end="4781.2">
+                          4687.5–4781.2 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-8" data-freq-start="4781.2" data-freq-end="4875.0">
+                          4781.2–4875.0 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-8" data-freq-start="4875.0" data-freq-end="4968.8">
+                          4875.0–4968.8 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-8" data-freq-start="4968.8" data-freq-end="5062.5">
+                          4968.8–5062.5 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-8" data-freq-start="5062.5" data-freq-end="5156.2">
+                          5062.5–5156.2 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-8" data-freq-start="5156.2" data-freq-end="5250.0">
+                          5156.2–5250.0 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-8" data-freq-start="5250.0" data-freq-end="5343.8">
+                          5250.0–5343.8 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-8" data-freq-start="5343.8" data-freq-end="5437.5">
+                          5343.8–5437.5 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-8" data-freq-start="5437.5" data-freq-end="5531.2">
+                          5437.5–5531.2 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-8" data-freq-start="5531.2" data-freq-end="5625.0">
+                          5531.2–5625.0 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-8" data-freq-start="5625.0" data-freq-end="5718.8">
+                          5625.0–5718.8 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-8" data-freq-start="5718.8" data-freq-end="5812.5">
+                          5718.8–5812.5 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-8" data-freq-start="5812.5" data-freq-end="5906.2">
+                          5812.5–5906.2 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-8" data-freq-start="5906.2" data-freq-end="6000.0">
+                          5906.2–6000.0 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-8" data-freq-start="6000.0" data-freq-end="6093.8">
+                          6000.0–6093.8 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-8" data-freq-start="6093.8" data-freq-end="6187.5">
+                          6093.8–6187.5 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-8" data-freq-start="6187.5" data-freq-end="6281.2">
+                          6187.5–6281.2 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-8" data-freq-start="6281.2" data-freq-end="6375.0">
+                          6281.2–6375.0 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-8" data-freq-start="6375.0" data-freq-end="6468.8">
+                          6375.0–6468.8 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-8" data-freq-start="6468.8" data-freq-end="6562.5">
+                          6468.8–6562.5 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-8" data-freq-start="6562.5" data-freq-end="6656.2">
+                          6562.5–6656.2 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-8" data-freq-start="6656.2" data-freq-end="6750.0">
+                          6656.2–6750.0 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-8" data-freq-start="6750.0" data-freq-end="6843.8">
+                          6750.0–6843.8 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-8" data-freq-start="6843.8" data-freq-end="6937.5">
+                          6843.8–6937.5 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-8" data-freq-start="6937.5" data-freq-end="7031.2">
+                          6937.5–7031.2 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-8" data-freq-start="7031.2" data-freq-end="7125.0">
+                          7031.2–7125.0 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-8" data-freq-start="7125.0" data-freq-end="7218.8">
+                          7125.0–7218.8 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-8" data-freq-start="7218.8" data-freq-end="7312.5">
+                          7218.8–7312.5 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-8" data-freq-start="7312.5" data-freq-end="7406.2">
+                          7312.5–7406.2 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-8" data-freq-start="7406.2" data-freq-end="7500.0">
+                          7406.2–7500.0 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-8" data-freq-start="7500.0" data-freq-end="7593.8">
+                          7500.0–7593.8 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-8" data-freq-start="7593.8" data-freq-end="7687.5">
+                          7593.8–7687.5 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-8" data-freq-start="7687.5" data-freq-end="7781.2">
+                          7687.5–7781.2 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-8" data-freq-start="7781.2" data-freq-end="7875.0">
+                          7781.2–7875.0 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-8" data-freq-start="7875.0" data-freq-end="7968.8">
+                          7875.0–7968.8 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-8" data-freq-start="7968.8" data-freq-end="8062.5">
+                          7968.8–8062.5 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-8" data-freq-start="8062.5" data-freq-end="8156.2">
+                          8062.5–8156.2 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-8" data-freq-start="8156.2" data-freq-end="8250.0">
+                          8156.2–8250.0 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-8" data-freq-start="8250.0" data-freq-end="8343.8">
+                          8250.0–8343.8 Hz
+                        </th>
+                        <!-- 🎵 Octave 9 (≈8372–16744 Hz) -->
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="8343.8" data-freq-end="8437.5">
+                          8343.8–8437.5 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="8437.5" data-freq-end="8531.2">
+                          8437.5–8531.2 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="8531.2" data-freq-end="8625.0">
+                          8531.2–8625.0 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="8625.0" data-freq-end="8718.8">
+                          8625.0–8718.8 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="8718.8" data-freq-end="8812.5">
+                          8718.8–8812.5 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="8812.5" data-freq-end="8906.2">
+                          8812.5–8906.2 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="8906.2" data-freq-end="9000.0">
+                          8906.2–9000.0 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="9000.0" data-freq-end="9093.8">
+                          9000.0–9093.8 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="9093.8" data-freq-end="9187.5">
+                          9093.8–9187.5 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="9187.5" data-freq-end="9281.2">
+                          9187.5–9281.2 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="9281.2" data-freq-end="9375.0">
+                          9281.2–9375.0 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="9375.0" data-freq-end="9468.8">
+                          9375.0–9468.8 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="9468.8" data-freq-end="9562.5">
+                          9468.8–9562.5 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="9562.5" data-freq-end="9656.2">
+                          9562.5–9656.2 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="9656.2" data-freq-end="9750.0">
+                          9656.2–9750.0 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="9750.0" data-freq-end="9843.8">
+                          9750.0–9843.8 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="9843.8" data-freq-end="9937.5">
+                          9843.8–9937.5 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="9937.5" data-freq-end="10031.2">
+                          9937.5–10031.2 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="10031.2" data-freq-end="10125.0">
+                          10031.2–10125.0 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="10125.0" data-freq-end="10218.8">
+                          10125.0–10218.8 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="10218.8" data-freq-end="10312.5">
+                          10218.8–10312.5 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="10312.5" data-freq-end="10406.2">
+                          10312.5–10406.2 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="10406.2" data-freq-end="10500.0">
+                          10406.2–10500.0 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="10500.0" data-freq-end="10593.8">
+                          10500.0–10593.8 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="10593.8" data-freq-end="10687.5">
+                          10593.8–10687.5 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="10687.5" data-freq-end="10781.2">
+                          10687.5–10781.2 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="10781.2" data-freq-end="10875.0">
+                          10781.2–10875.0 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="10875.0" data-freq-end="10968.8">
+                          10875.0–10968.8 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="10968.8" data-freq-end="11062.5">
+                          10968.8–11062.5 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="11062.5" data-freq-end="11156.2">
+                          11062.5–11156.2 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="11156.2" data-freq-end="11250.0">
+                          11156.2–11250.0 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="11250.0" data-freq-end="11343.8">
+                          11250.0–11343.8 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="11343.8" data-freq-end="11437.5">
+                          11343.8–11437.5 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="11437.5" data-freq-end="11531.2">
+                          11437.5–11531.2 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="11531.2" data-freq-end="11625.0">
+                          11531.2–11625.0 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="11625.0" data-freq-end="11718.8">
+                          11625.0–11718.8 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="11718.8" data-freq-end="11812.5">
+                          11718.8–11812.5 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="11812.5" data-freq-end="11906.2">
+                          11812.5–11906.2 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="11906.2" data-freq-end="12000.0">
+                          11906.2–12000.0 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="12000.0" data-freq-end="12093.8">
+                          12000.0–12093.8 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="12093.8" data-freq-end="12187.5">
+                          12093.8–12187.5 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="12187.5" data-freq-end="12281.2">
+                          12187.5–12281.2 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="12281.2" data-freq-end="12375.0">
+                          12281.2–12375.0 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="12375.0" data-freq-end="12468.8">
+                          12375.0–12468.8 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="12468.8" data-freq-end="12562.5">
+                          12468.8–12562.5 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="12562.5" data-freq-end="12656.2">
+                          12562.5–12656.2 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="12656.2" data-freq-end="12750.0">
+                          12656.2–12750.0 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="12750.0" data-freq-end="12843.8">
+                          12750.0–12843.8 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="12843.8" data-freq-end="12937.5">
+                          12843.8–12937.5 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="12937.5" data-freq-end="13031.2">
+                          12937.5–13031.2 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="13031.2" data-freq-end="13125.0">
+                          13031.2–13125.0 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="13125.0" data-freq-end="13218.8">
+                          13125.0–13218.8 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="13218.8" data-freq-end="13312.5">
+                          13218.8–13312.5 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="13312.5" data-freq-end="13406.2">
+                          13312.5–13406.2 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="13406.2" data-freq-end="13500.0">
+                          13406.2–13500.0 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="13500.0" data-freq-end="13593.8">
+                          13500.0–13593.8 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="13593.8" data-freq-end="13687.5">
+                          13593.8–13687.5 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="13687.5" data-freq-end="13781.2">
+                          13687.5–13781.2 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="13781.2" data-freq-end="13875.0">
+                          13781.2–13875.0 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="13875.0" data-freq-end="13968.8">
+                          13875.0–13968.8 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="13968.8" data-freq-end="14062.5">
+                          13968.8–14062.5 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="14062.5" data-freq-end="14156.2">
+                          14062.5–14156.2 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="14156.2" data-freq-end="14250.0">
+                          14156.2–14250.0 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="14250.0" data-freq-end="14343.8">
+                          14250.0–14343.8 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="14343.8" data-freq-end="14437.5">
+                          14343.8–14437.5 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="14437.5" data-freq-end="14531.2">
+                          14437.5–14531.2 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="14531.2" data-freq-end="14625.0">
+                          14531.2–14625.0 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="14625.0" data-freq-end="14718.8">
+                          14625.0–14718.8 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="14718.8" data-freq-end="14812.5">
+                          14718.8–14812.5 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="14812.5" data-freq-end="14906.2">
+                          14812.5–14906.2 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="14906.2" data-freq-end="15000.0">
+                          14906.2–15000.0 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="15000.0" data-freq-end="15093.8">
+                          15000.0–15093.8 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="15093.8" data-freq-end="15187.5">
+                          15093.8–15187.5 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="15187.5" data-freq-end="15281.2">
+                          15187.5–15281.2 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="15281.2" data-freq-end="15375.0">
+                          15281.2–15375.0 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="15375.0" data-freq-end="15468.8">
+                          15375.0–15468.8 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="15468.8" data-freq-end="15562.5">
+                          15468.8–15562.5 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="15562.5" data-freq-end="15656.2">
+                          15562.5–15656.2 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="15656.2" data-freq-end="15750.0">
+                          15656.2–15750.0 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="15750.0" data-freq-end="15843.8">
+                          15750.0–15843.8 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="15843.8" data-freq-end="15937.5">
+                          15843.8–15937.5 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="15937.5" data-freq-end="16031.2">
+                          15937.5–16031.2 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="16031.2" data-freq-end="16125.0">
+                          16031.2–16125.0 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="16125.0" data-freq-end="16218.8">
+                          16125.0–16218.8 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="16218.8" data-freq-end="16312.5">
+                          16218.8–16312.5 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="16312.5" data-freq-end="16406.2">
+                          16312.5–16406.2 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="16406.2" data-freq-end="16500.0">
+                          16406.2–16500.0 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="16500.0" data-freq-end="16593.8">
+                          16500.0–16593.8 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-9" data-freq-start="16593.8" data-freq-end="16687.5">
+                          16593.8–16687.5 Hz
+                        </th>
+                        <!-- 🎵 Octave 10 (≈16744–24000 Hz, capped by Nyquist) -->
+                        <th scope="col" class="fft-bin octave-10" data-freq-start="16687.5" data-freq-end="16781.2">
+                          16687.5–16781.2 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-10" data-freq-start="16781.2" data-freq-end="16875.0">
+                          16781.2–16875.0 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-10" data-freq-start="16875.0" data-freq-end="16968.8">
+                          16875.0–16968.8 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-10" data-freq-start="16968.8" data-freq-end="17062.5">
+                          16968.8–17062.5 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-10" data-freq-start="17062.5" data-freq-end="17156.2">
+                          17062.5–17156.2 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-10" data-freq-start="17156.2" data-freq-end="17250.0">
+                          17156.2–17250.0 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-10" data-freq-start="17250.0" data-freq-end="17343.8">
+                          17250.0–17343.8 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-10" data-freq-start="17343.8" data-freq-end="17437.5">
+                          17343.8–17437.5 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-10" data-freq-start="17437.5" data-freq-end="17531.2">
+                          17437.5–17531.2 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-10" data-freq-start="17531.2" data-freq-end="17625.0">
+                          17531.2–17625.0 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-10" data-freq-start="17625.0" data-freq-end="17718.8">
+                          17625.0–17718.8 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-10" data-freq-start="17718.8" data-freq-end="17812.5">
+                          17718.8–17812.5 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-10" data-freq-start="17812.5" data-freq-end="17906.2">
+                          17812.5–17906.2 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-10" data-freq-start="17906.2" data-freq-end="18000.0">
+                          17906.2–18000.0 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-10" data-freq-start="18000.0" data-freq-end="18093.8">
+                          18000.0–18093.8 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-10" data-freq-start="18093.8" data-freq-end="18187.5">
+                          18093.8–18187.5 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-10" data-freq-start="18187.5" data-freq-end="18281.2">
+                          18187.5–18281.2 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-10" data-freq-start="18281.2" data-freq-end="18375.0">
+                          18281.2–18375.0 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-10" data-freq-start="18375.0" data-freq-end="18468.8">
+                          18375.0–18468.8 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-10" data-freq-start="18468.8" data-freq-end="18562.5">
+                          18468.8–18562.5 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-10" data-freq-start="18562.5" data-freq-end="18656.2">
+                          18562.5–18656.2 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-10" data-freq-start="18656.2" data-freq-end="18750.0">
+                          18656.2–18750.0 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-10" data-freq-start="18750.0" data-freq-end="18843.8">
+                          18750.0–18843.8 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-10" data-freq-start="18843.8" data-freq-end="18937.5">
+                          18843.8–18937.5 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-10" data-freq-start="18937.5" data-freq-end="19031.2">
+                          18937.5–19031.2 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-10" data-freq-start="19031.2" data-freq-end="19125.0">
+                          19031.2–19125.0 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-10" data-freq-start="19125.0" data-freq-end="19218.8">
+                          19125.0–19218.8 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-10" data-freq-start="19218.8" data-freq-end="19312.5">
+                          19218.8–19312.5 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-10" data-freq-start="19312.5" data-freq-end="19406.2">
+                          19312.5–19406.2 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-10" data-freq-start="19406.2" data-freq-end="19500.0">
+                          19406.2–19500.0 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-10" data-freq-start="19500.0" data-freq-end="19593.8">
+                          19500.0–19593.8 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-10" data-freq-start="19593.8" data-freq-end="19687.5">
+                          19593.8–19687.5 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-10" data-freq-start="19687.5" data-freq-end="19781.2">
+                          19687.5–19781.2 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-10" data-freq-start="19781.2" data-freq-end="19875.0">
+                          19781.2–19875.0 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-10" data-freq-start="19875.0" data-freq-end="19968.8">
+                          19875.0–19968.8 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-10" data-freq-start="19968.8" data-freq-end="20062.5">
+                          19968.8–20062.5 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-10" data-freq-start="20062.5" data-freq-end="20156.2">
+                          20062.5–20156.2 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-10" data-freq-start="20156.2" data-freq-end="20250.0">
+                          20156.2–20250.0 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-10" data-freq-start="20250.0" data-freq-end="20343.8">
+                          20250.0–20343.8 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-10" data-freq-start="20343.8" data-freq-end="20437.5">
+                          20343.8–20437.5 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-10" data-freq-start="20437.5" data-freq-end="20531.2">
+                          20437.5–20531.2 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-10" data-freq-start="20531.2" data-freq-end="20625.0">
+                          20531.2–20625.0 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-10" data-freq-start="20625.0" data-freq-end="20718.8">
+                          20625.0–20718.8 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-10" data-freq-start="20718.8" data-freq-end="20812.5">
+                          20718.8–20812.5 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-10" data-freq-start="20812.5" data-freq-end="20906.2">
+                          20812.5–20906.2 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-10" data-freq-start="20906.2" data-freq-end="21000.0">
+                          20906.2–21000.0 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-10" data-freq-start="21000.0" data-freq-end="21093.8">
+                          21000.0–21093.8 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-10" data-freq-start="21093.8" data-freq-end="21187.5">
+                          21093.8–21187.5 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-10" data-freq-start="21187.5" data-freq-end="21281.2">
+                          21187.5–21281.2 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-10" data-freq-start="21281.2" data-freq-end="21375.0">
+                          21281.2–21375.0 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-10" data-freq-start="21375.0" data-freq-end="21468.8">
+                          21375.0–21468.8 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-10" data-freq-start="21468.8" data-freq-end="21562.5">
+                          21468.8–21562.5 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-10" data-freq-start="21562.5" data-freq-end="21656.2">
+                          21562.5–21656.2 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-10" data-freq-start="21656.2" data-freq-end="21750.0">
+                          21656.2–21750.0 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-10" data-freq-start="21750.0" data-freq-end="21843.8">
+                          21750.0–21843.8 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-10" data-freq-start="21843.8" data-freq-end="21937.5">
+                          21843.8–21937.5 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-10" data-freq-start="21937.5" data-freq-end="22031.2">
+                          21937.5–22031.2 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-10" data-freq-start="22031.2" data-freq-end="22125.0">
+                          22031.2–22125.0 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-10" data-freq-start="22125.0" data-freq-end="22218.8">
+                          22125.0–22218.8 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-10" data-freq-start="22218.8" data-freq-end="22312.5">
+                          22218.8–22312.5 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-10" data-freq-start="22312.5" data-freq-end="22406.2">
+                          22312.5–22406.2 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-10" data-freq-start="22406.2" data-freq-end="22500.0">
+                          22406.2–22500.0 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-10" data-freq-start="22500.0" data-freq-end="22593.8">
+                          22500.0–22593.8 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-10" data-freq-start="22593.8" data-freq-end="22687.5">
+                          22593.8–22687.5 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-10" data-freq-start="22687.5" data-freq-end="22781.2">
+                          22687.5–22781.2 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-10" data-freq-start="22781.2" data-freq-end="22875.0">
+                          22781.2–22875.0 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-10" data-freq-start="22875.0" data-freq-end="22968.8">
+                          22875.0–22968.8 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-10" data-freq-start="22968.8" data-freq-end="23062.5">
+                          22968.8–23062.5 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-10" data-freq-start="23062.5" data-freq-end="23156.2">
+                          23062.5–23156.2 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-10" data-freq-start="23156.2" data-freq-end="23250.0">
+                          23156.2–23250.0 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-10" data-freq-start="23250.0" data-freq-end="23343.8">
+                          23250.0–23343.8 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-10" data-freq-start="23343.8" data-freq-end="23437.5">
+                          23343.8–23437.5 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-10" data-freq-start="23437.5" data-freq-end="23531.2">
+                          23437.5–23531.2 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-10" data-freq-start="23531.2" data-freq-end="23625.0">
+                          23531.2–23625.0 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-10" data-freq-start="23625.0" data-freq-end="23718.8">
+                          23625.0–23718.8 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-10" data-freq-start="23718.8" data-freq-end="23812.5">
+                          23718.8–23812.5 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-10" data-freq-start="23812.5" data-freq-end="23906.2">
+                          23812.5–23906.2 Hz
+                        </th>
+                        <th scope="col" class="fft-bin octave-10" data-freq-start="23906.2" data-freq-end="24000.0">
+                          23906.2–24000.0 Hz
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <h6 style="text-align: center; margin: 2em;">Real Time Alignment of Interdisciplinary Multimodal Data Streams in Music
+    and Health Sciences</h6>
+
+  <!--Essential Code Ends-->
+
+
+  <!--HIGH RISK!!!!-->
+  <div class="highRisk">
+
+    <!--Kaldirirsan Siciyor-->
+    <p id="stmCounter" class="card-text numberText" style="display: none;"></p>
+    <!--This block is closed and none displayed hold this and don't delete RN problems-->
+    <div class="container-fluid" style="display: none;">
+      <div class="col-sm" style="background-color: #B9E5E8; padding: 1%; border: solid black 1px;">
+        <h5 class="labels text-center">Harmony&Counterpoint</h5>
+        <div class="row text-center">
+          <div class="col-sm" style="display: none;">
+            <label class="labels" for="romNumAnaly">RawChord</label>
+            <p id="rawChord" class="card-text numberText fw-bold"></p>
+          </div>
+          <div class="col-sm" style="display:none;">
+            <label class="labels" for="romNumAnaly">chordType</label>
+            <p id="chordType" class="card-text numberText fw-bold"></p>
+          </div>
+          <div class="col-sm">
+            <label class="labels" for="romNumAnaly">RN</label>
+          </div>
+          <div class="col-sm">
+            <label class="labels" for="root">Root</label>
+          </div>
+          <div class="col-sm">
+            <label class="labels" for="bassRegister">Bass</label>
+          </div>
+          <div class="col-sm">
+            <label class="labels" for="sopRegister">Soprano</label>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm" style="background-color: #DFF2EB; padding: 1%; border: solid black 1px; display: none;">
+        <h5 class="labels">Set Theory</h5>
+        <div class="row">
+          <div class="col-sm">
+            <label class="labels" for="stmHolder">PcSet</label>
+            <p id="stmHolder" class="card-text numberText"></p>
+          </div>
+          <div class="col-sm">
+            <label class="labels" for="root">ChordC</label>
+            <p id="intervalCode" class="card-text numberText" style="height: 10vh;"></p>
+          </div>
+          <div class="col-sm">
+            <label class="labels" for="bassRegister">Register</label>
+            <p id="actualMidiNotes" class="card-text numberText"></p>
+          </div>
+          <!---- <div class="col-sm">
+                <label class="labels" for="sopRegister">Frag</label>
+                <p id="scaleFirst" class="card-text numberText"></p>
+              </div>-->
+
+        </div>
+      </div>
+    </div>
+    <!-- Kat 1: Face Expression Recognition is also none displayed -->
+    <div class="row" style="display: none;">
+      <!-- YÜZ BİLGİ ALANI -->
+      <div class="col-sm">
+        <div id="face-info" class="card p-3" style="align-items:center; border:2px solid black;">
+          <div id="face-box" style="position:relative; border:2px solid black;">
+            <canvas id="face-canvas" style="position:absolute; top:0; left:0; width:150px; height:100px;"></canvas>
+          </div>
+          <div id="expression-label"
+            style="margin-top:10px; background:aliceblue; color:black; padding:5px; border-radius:5px; text-align:center;">
+            Expression
+          </div>
+        </div>
+      </div>
+      <!-- VİDEO -->
+      <div class="col-sm">
+        <div class="card mx-auto"
+          style="width:25.7rem; border:2px solid black; display:flex; justify-content:center; align-items:center;">
+          <video id="video" width="100" height="75" autoplay muted></video>
+        </div>
+      </div>
+      <div class="col-sm" id="moodsPanel" style="border:2px black solid; text-align:center;">
+        <div class="row justify-content-center">
+          <div class="col-sm" style="display:inline-block;">
+            <h6 style="color:black; font-weight:bolder;">Moods</h6>
+            <div class="row justify-content-center" style="color:aliceblue;">
+              <div class="col-sm-auto">
+                <p id="neutral">N</p>
+              </div>
+              <div class="col-sm-auto">
+                <p id="happy">H</p>
+              </div>
+              <div class="col-sm-auto">
+                <p id="sad">S</p>
+              </div>
+              <div class="col-sm-auto">
+                <p id="angry">A</p>
+              </div>
+              <div class="col-sm-auto">
+                <p id="fearful">F</p>
+              </div>
+              <div class="col-sm-auto">
+                <p id="disgusted">D</p>
+              </div>
+              <div class="col-sm-auto">
+                <p id="surprised">S</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row justify-content-center">
+          <div class="col-sm" style="display:inline-block;">
+            <h6 style="color:black; font-weight:bolder">Valence</h6>
+            <div class="row justify-content-center">
+              <div class="col-sm-auto">
+                <p id="neutralVal">Neutral</p>
+              </div>
+              <div class="col-sm-auto">
+                <p id="positiveVal">Positive</p>
+              </div>
+              <div class="col-sm-auto">
+                <p id="negativeVal">Negative</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row justify-content-center">
+          <div class="col-sm" style="display:inline-block;">
+            <h6 style="color:black; font-weight:bolder">Optimization</h6>
+            <div class="row justify-content-center">
+              <div class="col-sm-auto">
+                <p id="optimization">Outcome</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row keyFinding" style="display: none;">
+      <div class="col-sm">
+        <table id="performanceTable" class="table keyFinding">
+          <thead class="thead-custom ">
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">0</th>
+              <th scope="col">1</th>
+              <th scope="col">2</th>
+              <th scope="col">3</th>
+              <th scope="col">4</th>
+              <th scope="col">5</th>
+              <th scope="col">6</th>
+              <th scope="col">7</th>
+              <th scope="col">8</th>
+              <th scope="col">9</th>
+              <th scope="col">10</th>
+              <th scope="col">11</th>
+              <th scope="col">total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr id="individual">
+              <th scope="row" style="color: aliceblue;">Ind</th>
+              <td id="sifir">0</td>
+              <td id="bir">0</td>
+              <td id="iki">0</td>
+              <td id="uc">0</td>
+              <td id="dort">0</td>
+              <td id="bes">0</td>
+              <td id="alti">0</td>
+              <td id="yedi">0</td>
+              <td id="sekiz">0</td>
+              <td id="dokuz">0</td>
+              <td id="on">0</td>
+              <td id="onbir">0</td>
+              <td id="totalInd">0</td>
+            </tr>
+            <tr id="individual">
+              <th scope="row" style="color:aliceblue;">Averages</th>
+              <td id="sifirAve">0</td>
+              <td id="birAve">0</td>
+              <td id="ikiAve">0</td>
+              <td id="ucAve">0</td>
+              <td id="dortAve">0</td>
+              <td id="besAve">0</td>
+              <td id="altiAve">0</td>
+              <td id="yediAve">0</td>
+              <td id="sekizAve">0</td>
+              <td id="dokuzAve">0</td>
+              <td id="onAve">0</td>
+              <td id="onbirAve">0</td>
+              <td id="totalIndAve">0</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="row ml-5">
+          <div class="col">
+            <button id="transfer" type="button" class="btn btn-outline-warning ">Transfer</button>
+          </div>
+          <div class="col">
+            <button id="transferRedo" type="button" class="btn btn-outline-warning ">TransferRedo</button>
+          </div>
+          <div class="col">
+            <button id="transferUndo" type="button" class="btn btn-outline-warning ">TransferUndo</button>
+          </div>
+          <div class="col">
+            <button id="download" type="button" class="btn btn-outline-warning ">Download Excel</button>
+          </div>
+          <div class="col">
+            <button id="clearInd" type="button" class="btn btn-outline-warning ">Reset Ind</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row keyFinding" style="height: 18vh; display: none;">
+      <div class="col-sm ">
+        <table id="totalTable" class="table">
+          <thead class="thead-custom ">
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">0</th>
+              <th scope="col">1</th>
+              <th scope="col">2</th>
+              <th scope="col">3</th>
+              <th scope="col">4</th>
+              <th scope="col">5</th>
+              <th scope="col">6</th>
+              <th scope="col">7</th>
+              <th scope="col">8</th>
+              <th scope="col">9</th>
+              <th scope="col">10</th>
+              <th scope="col">11</th>
+              <th scope="col">total</th>
+            </tr>
+          </thead>
+          <tbody style="color: white">
+            <tr id="totalNumber;">
+              <th scope="row">Total</th>
+              <td id="sifirTotal">0</td>
+              <td id="birTotal">0</td>
+              <td id="ikiTotal">0</td>
+              <td id="ucTotal">0</td>
+              <td id="dortTotal">0</td>
+              <td id="besTotal">0</td>
+              <td id="altiTotal">0</td>
+              <td id="yediTotal">0</td>
+              <td id="sekizTotal">0</td>
+              <td id="dokuzTotal">0</td>
+              <td id="onTotal">0</td>
+              <td id="onbirTotal">0</td>
+              <td id="totalIndTotal">0</td>
+            </tr>
+            <tr id="totalAverage">
+              <th scope="row">AveragesTotal</th>
+              <td id="sifirAveTotal">0</td>
+              <td id="birAveTotal">0</td>
+              <td id="ikiAveTotal">0</td>
+              <td id="ucAveTotal">0</td>
+              <td id="dortAveTotal">0</td>
+              <td id="besAveTotal">0</td>
+              <td id="altiAveTotal">0</td>
+              <td id="yediAveTotal">0</td>
+              <td id="sekizAveTotal">0</td>
+              <td id="dokuzAveTotal">0</td>
+              <td id="onAveTotal">0</td>
+              <td id="onbirAveTotal">0</td>
+              <td id="totalIndAveTotal">0</td>
+            </tr>
+          </tbody>
+        </table>
+        <button id="downloadTotal" type="button" class="btn btn-outline-warning btn-block">Download
+          Excel</button>
+        <button id="resetTotal" type="button" class="btn btn-outline-warning btn-block">Reset Total Table Values
+          (Mock
+          Up Version)</button>
+      </div>
+    </div>
+    <div class="col-md-2" style="display: none;">
+      <div class="card">
+        <div class="card-header memory headUpHeight parameterHead">Chord</div>
+        <div class="card-body headBottomHeight">
+          <!-- İkili Açıklamalar İçin -->
+          <p id="dyad"></p>
+          <!-- Üçlü Açıklamalar İçin -->
+        </div>
+      </div>
+    </div>
+    <div class="col-md-2 " style="display: none;">
+      <div class="card">
+        <div class="card-header harmony headUpHeight parameterHead">Int</div>
+        <div class="card-body headBottomHeight">
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Script.js Entegrasyonu -->
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.3/xlsx.full.min.js"></script>
+  <script defer src="face-api.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/exceljs/dist/exceljs.min.js"></script>
+  <script defer src="js/global.js" defer></script>
+  <!--<script defer src="js/utils.js" defer></script>-->
+  <script defer src="js/communicationPanel.js" defer></script>
+  <script defer src="js/script.js" defer></script>
+  <!-- Optional JavaScript -->
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"></script>
+</body>
+
+</html>
